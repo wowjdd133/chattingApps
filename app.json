@@ -17,10 +17,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dgsw.chattingApp",
+      "googleServicesFile":"./GoogleService-Info.plist"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "android": {
+      "package": "com.dgsw.chattingApp",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

@@ -1,21 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { AppRegistry, Text } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import './config/firebaseConfig'; // 지우지말기.
+import { expo } from './app.json';
+import Navigation from './components/navigations';
+import { AuthProvider } from './providers/AuthProvider';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <PaperProvider>
+      <AuthProvider>
+          <Navigation />
+      </AuthProvider>
+    </PaperProvider>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+AppRegistry.registerComponent(expo.name, () => App);
