@@ -1,58 +1,59 @@
 import * as React from 'react';
-import { View, Text, TextInput } from 'react-native';
-import { Button } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { View, KeyboardAvoidingView, Platform } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { AntDesign } from '@expo/vector-icons';
 
 const SignInScreen = () => {
-  return (
 
+  return (
     <SafeAreaView
       style={{ flex: 1 }}
     >
-      <KeyboardAwareScrollView
-        resetScrollToCoords={{ x: 0, y: 0 }}
-        contentContainerStyle={{ flexGrow: 1 }}
-        enableOnAndroid
-        extraScrollHeight={10}
-        scrollEnabled
+      <KeyboardAvoidingView
+        style={{ flex: 1, alignItems: 'center' }}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.select({ ios: 0, android: -500 })}
       >
-        <View style={{ flex:1, alignItems: 'center' }}>
-          <View style={{ flex: 5 }}>
-            <Text>hi</Text>
-          </View>
-          <View style={{
-            flex: 5,
-            alignSelf: 'stretch',
-            justifyContent: 'space-evenly'
-          }}>
-            <View style={{
-              alignSelf: 'stretch'
-            }}>
-              <TextInput
-                placeholder="이메일"
-              />
-              <TextInput
-                placeholder="패스워드"
-                style={{ marginTop: 30 }}
-                secureTextEntry
-              />
-            </View>
-          </View>
-          <Button
-            accessibilityStates
-            onPress={() => { }}
-            color="#ffffff"
-            style={{
-              backgroundColor: '#000000',
-              width: '100%',
-              height: 70
-            }}
-          >
-            dfasdf
-        </Button>
+        <View style={{ flex: 4, justifyContent: 'center' }}>
+          <AntDesign name="wechat" size={96} color="#8b00ff" />
         </View>
-      </KeyboardAwareScrollView>
+        <View style={{
+          flex: 5,
+          alignSelf: 'stretch',
+          justifyContent: 'space-evenly'
+        }}>
+          <View style={{
+            alignSelf: 'stretch'
+          }}>
+            <TextInput
+              accessibilityStates
+              placeholder="이메일"
+            />
+            <TextInput
+              accessibilityStates
+              placeholder="패스워드"
+              style={{ marginTop: 30 }}
+              secureTextEntry
+            />
+          </View>
+        </View>
+        <Button
+          accessibilityStates
+          onPress={() => { }}
+          color="#ffffff"
+          style={{
+            backgroundColor: '#000000',
+            width: '100%',
+          }}
+          contentStyle={{
+            justifyContent: 'center',
+            height: 70
+          }}
+        >
+          dfasdf
+        </Button>
+      </KeyboardAvoidingView>
     </SafeAreaView>
 
   )
