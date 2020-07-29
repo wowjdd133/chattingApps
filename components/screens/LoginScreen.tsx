@@ -40,7 +40,7 @@ const LoginScreen = () => {
           labelStyle={styles.buttonLabel}
           accessibilityStates
           onPress={() => {
-
+            RootNavigation.navigate('signUp',null);
           }}
         >
           회원가입

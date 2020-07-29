@@ -1,14 +1,25 @@
 import React, { useState, createContext } from "react"
 import firebase, { auth } from 'firebase';
 import * as Facebook from 'expo-facebook';
+import { Alert } from "react-native";
+import ProfileScreen from "../components/screens/ProfileScreen";
 
 export type Auth = {
   user: any;
   setUser: any;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name: string, comment:string) => Promise<void>;
   logout: () => Promise<void>;
   loginWithFacebook: () => Promise<void>;
+  getProfile: () => Promise<User | null>;
+}
+
+interface User {
+  comment: string;
+  id: string;
+  name: string;
+  password: string;
+  profile: string;
 }
 
 export const AuthContext = createContext<Auth | undefined>(undefined);
@@ -32,11 +43,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             console.log(e);
           }
         },
-        register: async (email: string, password: string): Promise<void> => {
+        register: async (email: string, password: string, name:string, comment: string): Promise<void> => {
           try {
             await firebase.auth().createUserWithEmailAndPassword(email, password);
+            await firebase.auth().currentUser!.updateProfile({
+              displayName: name,
+              photoURL: "https://i.pinimg.com/736x/2c/2c/60/2c2c60b20cb817a80afd381ae23dab05.jpg",
+            })
+            await firebase.database().ref('users/').set({
+              id: email,
+              password: password,
+              name: name,
+              comment: comment,
+              profile: "https://i.pinimg.com/736x/2c/2c/60/2c2c60b20cb817a80afd381ae23dab05.jpg",
+            })
           } catch (e) {
-            console.log(e);
+            Alert.alert("실패", e.message);
           }
         },
         logout: async (): Promise<void> => {
@@ -60,15 +82,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             );
 
           if (type === 'success') {
+
             const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
             firebase.auth().signInWithCredential(credential).catch((err) => {
-              console.log(err);
+              console.warn(err);
             });
+
+            console.warn(credential);
           }
+        },
+        getProfile: async (): Promise<User | null> => {
+          const db = firebase.database();
+          const ref = db.ref("/users");
+          let result = null;
+          ref.on("value", (snapshot) => {
+            result = snapshot.val();
+          }, (errorObject: any) => {
+            console.log(errorObject.code);
+          });
+
+          return result;
         }
       }}
-
     >
       {children}
     </AuthContext.Provider>

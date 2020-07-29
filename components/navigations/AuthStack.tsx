@@ -11,14 +11,14 @@ const AuthStack = () => {
 
   const Stack = createStackNavigator();
 
-  const user = React.useContext(AuthContext);
-  if(user == undefined) return <Text>이게 가능할려나..</Text>
+  const userContext = React.useContext(AuthContext);
+  if(userContext == undefined) return <Text>이게 가능할려나..</Text>
   
-  const [loading, setLoading] = React.useState(true);
+  // const [loading, setLoading] = React.useState(true);
 
-  const onAuthstateChanged = (_user:any) => {
-    user.setUser(_user);
-    setLoading(false);
+  const onAuthstateChanged = (user:any) => {
+    console.log(user);
+    userContext.setUser(user);
   }
 
   React.useEffect(() => {
