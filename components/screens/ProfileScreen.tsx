@@ -2,45 +2,95 @@ import * as React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons';
-import { Button,Subheading } from 'react-native-paper';
+import { Button, Subheading, Title, Avatar } from 'react-native-paper';
 import { AuthContext } from '../../providers/AuthProvider';
 import { useNavigation } from '@react-navigation/native';
+
+interface User {
+  displayName: string;
+  email: string;
+  phoneNumbeR: string;
+  photoURL: string;
+  providerID: string;
+  uid: string;
+}
+
+interface Profile {
+  comment: string;
+  id: string;
+  name: string;
+  password: string;
+  profile: string;
+}
 
 const ProfileScreen = () => {
 
   const user = React.useContext(AuthContext);
   const Navigation = useNavigation();
 
-  if(!user) return <Text>없어요 ㅋㅋ</Text>;
+  if (!user) return <Text>없어요 ㅋㅋ</Text>;
+
+  const [userProfile, setUserProfile] = React.useState<Profile>({
+    comment: "상태 메시지가 없습니다.",
+    id: "",
+    name: "",
+    password: "",
+    profile: "",
+  });
+
+  // console.log(user.user.displayName);
+  // console.log(user.user.email);
+  // console.log(user.user.photoURL);
+  // console.log(user.user.emailVerified);
+  // console.log(user.user.uid);
+
+  React.useEffect(() => {
+    (async () => {
+      const data = await user.getProfile();
+      console.log(data);
+      if (data) {
+        setUserProfile(data);
+      }
+    })();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}>
-          <FontAwesome
-            name="user"
-            size={96}
+        <TouchableOpacity
+          onPress={() => {
+            console.log('navigate editProfile');
+          }}
+        style={{ flex: 7, alignItems: 'center', justifyContent: 'space-evenly' }}>
+          <Avatar.Image
+            accessibilityStates
+            source={{ uri: user.user.photoURL }}
+            size={224}
           />
-        </View>
+          <Title>
+            {user.user.displayName}
+          </Title>
+
+        </TouchableOpacity>
         <View style={{ flex: 5 }}>
           <TouchableOpacity
             onPress={() => {
               console.log('navigate editProfile');
             }}
             style={{
-              paddingLeft:30,
-              backgroundColor:'#d9d9d9'
+              paddingLeft: 30,
+              backgroundColor: '#d9d9d9'
             }}
           >
             <Text
-              style={{marginBottom: 5}}
+              style={{ marginBottom: 5 }}
             >
               상태 메시지
           </Text>
             <Subheading
             >
-              아이고야
-          </Subheading>
+              {userProfile.comment}
+            </Subheading>
           </TouchableOpacity>
           <Button
             style={{ marginTop: 30 }}
@@ -54,7 +104,7 @@ const ProfileScreen = () => {
           </Button>
           <Button
             style={{
-               marginTop: 30
+              marginTop: 30
             }}
             color="#f72f72"
             accessibilityStates
