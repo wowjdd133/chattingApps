@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import * as firebase from 'firebase';
+import {AuthContext} from '../../providers/AuthProvider';
 
 const exampleUserList = {
   user: [{
@@ -21,6 +24,24 @@ const exampleUserList = {
 }
 
 const FriendsScreen = () => {
+
+  const user = React.useContext(AuthContext);
+  const navigation = useNavigation();
+  
+  React.useEffect((() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const uid = user.user.uid;
+      const userRef = firebase.database().ref('/users/' + uid);
+      userRef.on('value', (snapshot: any) => {
+        if(snapshot.val() == null){
+          navigation.navigate('updateProfile');
+        }
+      })
+    })
+
+    return unsubscribe;
+  }),[navigation])
+
 
   return (
     <View style={{ flex: 1 }}>
