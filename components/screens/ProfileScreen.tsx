@@ -32,9 +32,6 @@ const ProfileScreen = () => {
 
   const [userProfile, setUserProfile] = React.useState<Profile>({
     comment: "상태 메시지가 없습니다.",
-    id: "",
-    name: "",
-    password: "",
     profile: "",
   });
 
@@ -47,9 +44,13 @@ const ProfileScreen = () => {
   React.useEffect(() => {
     (async () => {
       const data = await user.getProfile();
-      console.log(data);
-      if (data) {
-        setUserProfile(data);
+      if (data !== null) {
+        console.warn(data);
+        setUserProfile({
+          comment: data.comment,
+          profile: data.profile
+        })
+        // setUserProfile(data);
       }
     })();
   }, []);
@@ -69,6 +70,10 @@ const ProfileScreen = () => {
           />
           <Title>
             {user.user.displayName}
+          </Title>
+
+          <Title>
+            {user.user.uid}
           </Title>
 
         </TouchableOpacity>

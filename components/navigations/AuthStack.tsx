@@ -17,7 +17,6 @@ const AuthStack = () => {
   // const [loading, setLoading] = React.useState(true);
 
   const onAuthstateChanged = (user:any) => {
-    console.log(user);
     userContext.setUser(user);
   }
 

@@ -50,8 +50,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
               displayName: name,
               photoURL: "https://i.pinimg.com/736x/2c/2c/60/2c2c60b20cb817a80afd381ae23dab05.jpg",
             })
-            await firebase.database().ref('users/').set({
-              id: email,
+            const uid = firebase.auth().currentUser.uid;
+            await firebase.database().ref('users/').child(uid).set({
+              email: email,
+              uid: uid,
               password: password,
               name: name,
               comment: comment,
@@ -82,21 +84,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             );
 
           if (type === 'success') {
-
             const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
             firebase.auth().signInWithCredential(credential).catch((err) => {
               console.warn(err);
             });
 
-            console.warn(credential);
           }
         },
         getProfile: async (): Promise<User | null> => {
           const db = firebase.database();
-          const ref = db.ref("/users");
+          const uid = firebase.auth().currentUser.uid;
+          const ref = db.ref("/users/" + uid);
           let result = null;
-          ref.on("value", (snapshot) => {
+          ref.on("value", (snapshot: any) => {
             result = snapshot.val();
           }, (errorObject: any) => {
             console.log(errorObject.code);
