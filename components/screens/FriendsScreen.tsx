@@ -28,19 +28,19 @@ const FriendsScreen = () => {
   const user = React.useContext(AuthContext);
   const navigation = useNavigation();
   
-  React.useEffect((() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      const uid = user.user.uid;
-      const userRef = firebase.database().ref('/users/' + uid);
-      userRef.on('value', (snapshot: any) => {
-        if(snapshot.val() == null){
-          navigation.navigate('updateProfile');
-        }
-      })
-    })
+  // React.useEffect((() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     const uid = user.user.uid;
+  //     const userRef = firebase.database().ref('/users/' + uid);
+  //     userRef.on('value', (snapshot: any) => {
+  //       if(snapshot.val() == null){
+  //         navigation.navigate('updateProfile');
+  //       }
+  //     })
+  //   })
 
-    return unsubscribe;
-  }),[navigation])
+  //   return unsubscribe;
+  // }),[navigation])
 
 
   return (
