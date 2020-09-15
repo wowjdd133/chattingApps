@@ -5,14 +5,17 @@ import {
   Text,
 } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
+import {
+  loginWithFacebook,
+} from '../../utils/AuthUtil';
 import { Button } from 'react-native-paper';
-import {AuthContext} from '../../providers/AuthProvider';
+// import {AuthContext} from '../../providers/AuthProvider';
 import * as RootNavigation from '../navigations/RootNavigation';
 
 const LoginScreen = () => {
 
-  const user = React.useContext(AuthContext);
-  if(user == undefined) return <Text>이게 가능할려나..</Text>
+  // const user = React.useContext(AuthContext);
+  // if(user == undefined) return <Text>이게 가능할려나..</Text>
   
   return (
     <View style={styles.container}>
@@ -52,12 +55,8 @@ const LoginScreen = () => {
           color="#3B5998"
           labelStyle={styles.buttonLabel}
           accessibilityStates
-          onPress={async ():Promise<void> => {
-            try{
-              await user.loginWithFacebook();
-            } catch(err) {
-              console.log(err);
-            }
+          onPress={async () => {
+            await loginWithFacebook();
           }}
         >
           페이스북으로 로그인

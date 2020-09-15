@@ -3,7 +3,10 @@ import { View, Platform, Alert } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
-import { AuthContext } from '../../providers/AuthProvider';
+// import { AuthContext } from '../../providers/AuthProvider';
+import {
+  login
+} from '../../utils/AuthUtil';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const SignInScreen = () => {
@@ -11,13 +14,13 @@ const SignInScreen = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const user = React.useContext(AuthContext);
-  if (user == undefined) return <View style={{ flex: 1, backgroundColor: 'black' }}></View>
+  // const user = React.useContext(AuthContext);
+  // if (user == undefined) return <View style={{ flex: 1, backgroundColor: 'black' }}></View>
 
   const handleSignUp = async (): Promise<void> => {
     if (email.length >= 8) {
       if (password.length >= 8) {
-          await user.login(email, password);
+          await login(email, password);
       } else {
         Alert.alert("실패", "패스워드는 9자 이상으로 해주세요.");
       }

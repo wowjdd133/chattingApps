@@ -10,7 +10,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TextInput, Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-import { AuthContext } from '../../providers/AuthProvider';
+import {
+  register
+} from '../../utils/AuthUtil';
+// import { AuthContext } from '../../providers/AuthProvider';
 
 const SignUpSreen = () => {
 
@@ -19,14 +22,14 @@ const SignUpSreen = () => {
   const [name, setName] = React.useState('');
   const [comment, setComment] = React.useState('');
 
-  const user = React.useContext(AuthContext);
-  if (user == undefined) return <View style={{ flex: 1, backgroundColor: 'black' }}></View>
+  // const user = React.useContext(AuthContext);
+  // if (user == undefined) return <View style={{ flex: 1, backgroundColor: 'black' }}></View>
 
   const handleSignIn = async (): Promise<void> => {
     if (email.length >= 8) {
       if (password.length >= 8) {
         if (name.length >= 2) {
-          await user.register(email, password, name, comment);
+          await register(email, password, name, comment);
         } else {
           Alert.alert("실패", "이름은 3자 이상으로 해주세요.")
         }
