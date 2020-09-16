@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image } from '
 import {useNavigation} from '@react-navigation/native';
 import * as firebase from 'firebase';
 import {AuthContext} from '../../providers/AuthProvider';
+import { Button } from 'react-native-paper';
 
 const exampleUserList = {
   user: [{
@@ -23,10 +24,25 @@ const exampleUserList = {
   }]
 }
 
+const FotterButton = ({onPress}) => {
+  return (
+    <Button
+      accessibilityStates
+      color={'#645464'}
+      onPress={onPress}
+      children={'친구 찾기'}
+    />
+  )
+}
+
 const FriendsScreen = () => {
 
   const user = React.useContext(AuthContext);
   const navigation = useNavigation();
+
+  const handleOnClick = () => {
+    navigation.navigate('Users');
+  }
   
   // React.useEffect((() => {
   //   const unsubscribe = navigation.addListener('focus', () => {
@@ -80,6 +96,9 @@ const FriendsScreen = () => {
             </TouchableOpacity>
           )
         }}
+      />
+      <FotterButton
+        onPress={handleOnClick}
       />
     </View>
   )
