@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import FriendsScreen from '../screens/FriendsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import UsersScreen from '../screens/UsersScreen';
 import UpdateProfileScreen from '../screens/UpdateProfileScreen';
 import ChattingScreen from '../screens/ChattingScreen';
 import HomeTabs from './HomeTabs';
@@ -63,6 +64,12 @@ const HomeStack = () => {
           headerShown: false,
         }}
         name="updateProfile" component={UpdateProfileScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Users" component={UsersScreen}
       />
     </Stack.Navigator>
   )
