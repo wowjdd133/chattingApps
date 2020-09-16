@@ -57,13 +57,26 @@ export const loginWithFacebook = async (): Promise<void> => {
     type,
     token
   } = await Facebook.logInWithReadPermissionsAsync(
-      { permissions: ['public_profile'] }
+      { permissions: ['public_profile','email'] }
     );
 
   if (type === 'success') {
     const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
-    firebase.auth().signInWithCredential(credential).catch((err) => {
+    firebase.auth().signInWithCredential(credential)
+    .then((data) => {
+      const user = data.user!;
+      const db = firebase.database();
+      const ref = db.ref(`/users/${user.uid}`)
+
+      ref.set({
+        uid: user.uid,
+        name: user.displayName,
+        profile: user.photoURL,
+        email: user.email,
+      })
+    })
+    .catch((err) => {
       console.warn(err);
     });
   }

@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 // import { AuthContext } from '../../providers/AuthProvider';
 import {
   login
-} from '../../utils/AuthUtil';
+} from '../../utils/authUtil';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const SignInScreen = () => {

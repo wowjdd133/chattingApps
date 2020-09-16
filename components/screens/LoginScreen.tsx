@@ -7,7 +7,7 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import {
   loginWithFacebook,
-} from '../../utils/AuthUtil';
+} from '../../utils/authUtil';
 import { Button } from 'react-native-paper';
 // import {AuthContext} from '../../providers/AuthProvider';
 import * as RootNavigation from '../navigations/RootNavigation';

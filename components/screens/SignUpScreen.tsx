@@ -12,7 +12,7 @@ import { TextInput, Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import {
   register
-} from '../../utils/AuthUtil';
+} from '../../utils/authUtil';
 // import { AuthContext } from '../../providers/AuthProvider';
 
 const SignUpSreen = () => {

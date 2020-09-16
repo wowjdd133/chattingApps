@@ -4,6 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons';
 import { Button, Subheading, Title, Avatar } from 'react-native-paper';
 import { AuthContext } from '../../providers/AuthProvider';
+import {
+  getProfile
+} from '../../utils/userUtil';
 import { useNavigation } from '@react-navigation/native';
 
 interface User {
@@ -17,9 +20,9 @@ interface User {
 
 interface Profile {
   comment: string;
-  id: string;
-  name: string;
-  password: string;
+  // id: string;
+  // name: string;
+  // password: string;
   profile: string;
 }
 
@@ -35,15 +38,9 @@ const ProfileScreen = () => {
     profile: "",
   });
 
-  // console.log(user.user.displayName);
-  // console.log(user.user.email);
-  // console.log(user.user.photoURL);
-  // console.log(user.user.emailVerified);
-  // console.log(user.user.uid);
-
   React.useEffect(() => {
     (async () => {
-      const data = await user.getProfile();
+      const data = await getProfile();
       if (data !== null) {
         console.warn(data);
         setUserProfile({
