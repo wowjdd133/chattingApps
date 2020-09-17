@@ -9,6 +9,7 @@ import {
 import {
   AuthContext
 } from '../../providers/AuthProvider';
+import UserListItem from '../common/UserListItem';
 
 interface User {
   comment: string;
@@ -31,66 +32,6 @@ const renderSeparator = () => {
   );
 };
 
-const UsersListItem = ({item, onPress}) => {
-
-  const authContext = React.useContext(AuthContext)
-
-  return (
-    <TouchableOpacity
-      onPress={() => {onPress(authContext!.user.uid, item.uid)}}
-      style={{
-        flexDirection: 'row',
-        marginTop: 7,
-        marginBottom: 7,
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginLeft: 25,
-        }}
-      >
-        <Avatar.Image
-          size={64}
-          accessibilityStates
-          source={{ uri: item.profile }}
-        >
-        </Avatar.Image>
-      </View>
-      <View
-        style={{
-          flex: 2,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        <Text
-          style={{ fontSize: 19 }}
-          accessibilityStates
-        >
-          {item.name}
-        </Text>
-      </View>
-      <View
-        style={{
-          flex: 3,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        <Text
-          accessibilityStates
-        >
-          {item.comment ? item.comment : '소개가 없습니다.'}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  )
-}
-
 const UsersScreen = () => {
 
   const [users, setUsers] = React.useState<User[] | null>([]);
@@ -98,16 +39,11 @@ const UsersScreen = () => {
   React.useEffect(() => {
     (async () => {
       let data = await getUsers();
-
-      if (data != null) {
-        data = Object.values(data);
-      }
-
+      
       setUsers(data);
     })();
   }, []);
 
-  console.log(users);
 
   const handleOnPress = (uid: string, reqUid: string) => {
     Alert.alert("친구 추가 요청",'친구 추가 요청을 하시겠습니까?',
@@ -118,7 +54,12 @@ const UsersScreen = () => {
         {
           text: "요청",
           onPress: async () => {
-            await requestFriend(uid = uid, reqUid = reqUid);
+            try{
+              await requestFriend(uid = uid, reqUid = reqUid);
+              Alert.alert("성공");
+            }catch(err){
+              Alert.alert("실패");
+            }
           }
         }
       ]
@@ -130,13 +71,13 @@ const UsersScreen = () => {
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
       <FlatList
-        keyExtractor={item => item.uid}
+        keyExtractor={(item) => item.uid.toString()}
         style={{ flex: 1, width: '100%' }}
         data={users}
         ItemSeparatorComponent={renderSeparator}
         renderItem={({ item }) => {
           return (
-            <UsersListItem
+            <UserListItem
               onPress={handleOnPress}
               item={item}
             />
