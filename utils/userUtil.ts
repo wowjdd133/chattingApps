@@ -18,7 +18,6 @@ export const getProfile = async ():Promise<User | null> => {
 
   let result = null;
 
-  ref.off();
   await ref.once("value", (snapshot: any) => {
     result = snapshot.val();
   }, (errorObject: any) => {
@@ -31,17 +30,35 @@ export const getProfile = async ():Promise<User | null> => {
 export const getUsers = async ():Promise<User[] | null> => {
   
   const db = firebase.database();
+  const ref = db.ref("/users");
+
+  let result = null;
+
+  await ref.once("value", (snapshot: any) => {
+    const data = snapshot.val();
+    if(data != null)
+      result = Object.values(data);
+  }, (errorObject: any) => {
+    console.warn(errorObject.code)
+  })
+  return result;
+}
+
+export const getRequesters = async (uid:string):Promise<User[] | null> => {
+
+  const db = firebase.database();
   const ref = db.ref("/users/");
 
   let result = null;
 
-  ref.off();
-  await ref.orderByChild('name').once("value", (snapshot: any) => {
-    result = snapshot.val();
+  await ref.child(uid).orderByChild('name').on("value", (snapshot: any) => {
+    const data = snapshot.val();
+    if(data != null){
+      result = Object.values(data);
+    }
   }, (errorObject: any) => {
-    console.log(errorObject.code)
-  })
-  console.log(result);
+    console.log(errorObject.code);
+  });
   return result;
 }
 
