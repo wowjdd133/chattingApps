@@ -5,6 +5,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import UsersScreen from '../screens/UsersScreen';
 import UpdateProfileScreen from '../screens/UpdateProfileScreen';
 import ChattingScreen from '../screens/ChattingScreen';
+import UsersTabs from './UserTabs'
 import HomeTabs from './HomeTabs';
 import { Button, TouchableOpacityComponent, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
@@ -54,6 +55,7 @@ const HomeStack = () => {
       }
     >
       <Stack.Screen name="homeTab" component={HomeTabs} />
+      <Stack.Screen name="usersTab" component={UsersTabs}/>
       <Stack.Screen
         options= {{
           headerShown: false,
@@ -65,12 +67,7 @@ const HomeStack = () => {
         }}
         name="updateProfile" component={UpdateProfileScreen}
       />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="Users" component={UsersScreen}
-      />
+
     </Stack.Navigator>
   )
 }
