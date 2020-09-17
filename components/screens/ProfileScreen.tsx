@@ -5,8 +5,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Button, Subheading, Title, Avatar } from 'react-native-paper';
 import { AuthContext } from '../../providers/AuthProvider';
 import {
-  getProfile
+  getProfile,
 } from '../../utils/userUtil';
+import {
+  logout,
+} from '../../utils/authUtil';
 import { useNavigation } from '@react-navigation/native';
 
 interface User {
@@ -34,7 +37,7 @@ const ProfileScreen = () => {
   if (!user) return <Text>없어요 ㅋㅋ</Text>;
 
   const [userProfile, setUserProfile] = React.useState<Profile>({
-    comment: "상태 메시지가 없습니다.",
+    comment: "",
     profile: "",
   });
 
@@ -42,7 +45,6 @@ const ProfileScreen = () => {
     (async () => {
       const data = await getProfile();
       if (data !== null) {
-        console.warn(data);
         setUserProfile({
           comment: data.comment,
           profile: data.profile
@@ -91,15 +93,15 @@ const ProfileScreen = () => {
           </Text>
             <Subheading
             >
-              {userProfile.comment}
+              {userProfile.comment ?? '코멘트가 없습니다.'}
             </Subheading>
           </TouchableOpacity>
           <Button
             style={{ marginTop: 30 }}
             accessibilityStates
             mode="contained"
-            onPress={() => {
-              user.logout();
+            onPress={async () => {
+              await logout();
             }}
           >
             Logout
