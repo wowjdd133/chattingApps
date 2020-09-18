@@ -4,9 +4,7 @@ import { Children } from 'react';
 interface User {
   comment: string;
   uid: string;
-  email: string;
   name: string;
-  password: string;
   profile: string;
 }
 
@@ -16,10 +14,23 @@ export const getProfile = async ():Promise<User | null> => {
   const uid = firebase.auth().currentUser!.uid;
   const ref = db.ref("/users/" + uid);
 
-  let result = null;
+  let result:User | null = null;
 
   await ref.once("value", (snapshot: any) => {
-    result = snapshot.val();
+    const {
+      uid,
+      comment,
+      name,
+      profile
+    } = snapshot.val();
+    
+    result = {
+      uid,
+      comment,
+      name,
+      profile
+    }
+
   }, (errorObject: any) => {
     console.log(errorObject.code);
   })
@@ -32,15 +43,32 @@ export const getUsers = async ():Promise<User[] | null> => {
   const db = firebase.database();
   const ref = db.ref("/users");
 
-  let result = null;
+  let result:User[]= [];
 
-  await ref.once("value", (snapshot: any) => {
-    const data = snapshot.val();
-    if(data != null)
-      result = Object.values(data);
+  await ref.orderByKey().limitToLast(100).on("child_added", (snapshot: any) => {
+    let data = snapshot.val();
+    
+    result.push({
+      uid: data.uid,
+      comment: data.comment,
+      profile: data.profile,
+      name: data.name,
+    });
+    // console.log(data);
+    
+    // result = data.map((item:User) => {
+    //   return {
+    //     uid: item.uid,
+    //     profile: item.profile,
+    //     comment: item.comment,
+    //     name: item.name
+    //   }
+    // })
+
   }, (errorObject: any) => {
     console.warn(errorObject.code)
   })
+
   return result;
 }
 
@@ -51,25 +79,25 @@ export const getRequesters = async (uid:string):Promise<User[] | null> => {
 
   let result = null;
 
-  await ref.child(uid).orderByChild('name').on("value", (snapshot: any) => {
+  await ref.child(`${uid}/request`).on("child_added", (snapshot: any) => {
     const data = snapshot.val();
-    if(data != null){
-      result = Object.values(data);
-    }
+    const key = snapshot.key
+    
+    console.log(data);
   }, (errorObject: any) => {
     console.log(errorObject.code);
   });
+
+  console.log(result);
   return result;
 }
 
 export const requestFriend = async (uid:string, reqUid:string):Promise<Boolean> => {
   
   const db = firebase.database();
-  const ref = db.ref(`/users/${uid}/request`).child(reqUid)
+  const ref = db.ref(`/users/${reqUid}/request`).child(uid);
 
-  await ref.set({
-    reqUid: false
-  });
+  await ref.update(false);
   
   return true;
 }
