@@ -43,7 +43,7 @@ const ProfileScreen = () => {
 
   React.useEffect(() => {
     (async () => {
-      const data = await getProfile();
+      const data = await getProfile(user.user.uid);
       if (data !== null) {
         setUserProfile({
           comment: data.comment,
