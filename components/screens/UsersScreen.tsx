@@ -13,9 +13,7 @@ import UserListItem from '../common/UserListItem';
 
 interface User {
   comment: string;
-  email: string;
   name: string;
-  password: string;
   profile: string;
   uid: string;
 }
@@ -55,9 +53,10 @@ const UsersScreen = () => {
           text: "요청",
           onPress: async () => {
             try{
-              await requestFriend(uid = uid, reqUid = reqUid);
+              await requestFriend(uid, reqUid);
               Alert.alert("성공");
             }catch(err){
+              console.warn(err);
               Alert.alert("실패");
             }
           }
