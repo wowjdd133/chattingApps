@@ -3,6 +3,7 @@ import {AuthContext} from '../../providers/AuthProvider';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View } from 'react-native';
 import { Avatar, Text } from 'react-native-paper';
+import ProfileIcon from './ProfileIcon';
 
 const UserListItem = ({item, onPress}) => {
 
@@ -13,6 +14,7 @@ const UserListItem = ({item, onPress}) => {
       onPress={() => {onPress(authContext!.user.uid, item.uid)}}
       style={{
         flexDirection: 'row',
+        marginTop:7,
         marginBottom: 7,
         flex: 1,
       }}
@@ -25,12 +27,10 @@ const UserListItem = ({item, onPress}) => {
           marginLeft: 25,
         }}
       >
-        <Avatar.Image
+        <ProfileIcon
           size={64}
-          accessibilityStates
-          source={{ uri: item.profile }}
-        >
-        </Avatar.Image>
+          uri={item.profile}
+        />
       </View>
       <View
         style={{
