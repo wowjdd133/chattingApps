@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FriendsScreen from '../screens/FriendsScreen';
-import ChattingScreen from '../screens/ChattingScreen';
+import ChattingListScreen from '../screens/ChattingListScreen';
 
 const HomeTabs = () => {
   
@@ -10,7 +10,7 @@ const HomeTabs = () => {
   return(
     <Tab.Navigator>
       <Tab.Screen name="friends" component={FriendsScreen}/>
-      <Tab.Screen name="chatting" component={ChattingScreen}/>
+      <Tab.Screen name="chattingList" component={ChattingListScreen}/>
     </Tab.Navigator>
   )
 }

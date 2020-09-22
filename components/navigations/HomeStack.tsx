@@ -4,7 +4,7 @@ import FriendsScreen from '../screens/FriendsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import UsersScreen from '../screens/UsersScreen';
 import UpdateProfileScreen from '../screens/UpdateProfileScreen';
-import ChattingScreen from '../screens/ChattingScreen';
+import ChattingScreen from '../screens/ChattingListScreen';
 import UsersTabs from './UserTabs'
 import HomeTabs from './HomeTabs';
 import { Button, TouchableOpacityComponent, TouchableOpacity } from 'react-native';
@@ -12,29 +12,13 @@ import { FontAwesome } from '@expo/vector-icons';
 import * as RootNavigation from './RootNavigation';
 import * as firebase from 'firebase';
 import { AuthContext } from '../../providers/AuthProvider';
+import ChattingStack from './ChattingStack';
 // import {useNavigation} from '@react-navigation/native';
 // import * as navigater from './RootNavigation';
 
 const HomeStack = () => {
 
-  //friedns, profile은 tabbar로 만들기.
   const Stack = createStackNavigator();
-  // const user = React.useContext(AuthContext);
-  // const navigation = useNavigation();
-  
-  // React.useEffect((() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     const uid = user.user.uid;
-  //     const userRef = firebase.database().ref('/users/' + uid);
-  //     userRef.on('value', (snapshot: any) => {
-  //       if(snapshot.val() == null){
-  //         navigater.navigate('profile','');
-  //       }
-  //     })
-  //   })
-
-  //   return unsubscribe;
-  // }),[navigation])
 
   return (
     <Stack.Navigator
@@ -55,6 +39,21 @@ const HomeStack = () => {
       }
     >
       <Stack.Screen name="homeTab" component={HomeTabs} />
+      <Stack.Screen 
+        options= {{
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ height: '100%', justifyContent: 'center', marginLeft: 24 }}
+              onPress={() => { 
+                RootNavigation.navigate('chattingList',null);
+              }}
+            >
+              <FontAwesome name="arrow-left" size={32} color="black" />
+            </TouchableOpacity>
+          ),
+          headerTitle: '채팅'
+        }}
+      name="chatting" component={ChattingScreen}/>
       <Stack.Screen name="usersTab" component={UsersTabs}/>
       <Stack.Screen
         options= {{
