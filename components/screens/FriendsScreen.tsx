@@ -1,86 +1,113 @@
 import * as React from 'react';
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import {AuthContext} from '../../providers/AuthProvider';
+import { AuthContext } from '../../providers/AuthProvider';
 import { Button } from 'react-native-paper';
+import UserListItem from '../common/UserListItem';
+import { getFriends, removeFriend } from '../../utils/userUtil';
 
-const exampleUserList = {
-  user: [{
-    profileURL: "",
-    name: "김첨지",
-    uid: 'asdfasdvafwefad532zvzvxcHDBSF',
-    statusMessage: "1렇게 살자"
-  }, {
-    profileURL: "",
-    name: "김첨지2",
-    uid: 'xzcbxzcvqdwdw^$&HDBSF',
-    statusMessage: "2렇게 살자"
-  }, {
-    profileURL: "",
-    name: "김첨지3",
-    uid: 'adfqzxcvbefe^$&HDBSF',
-    statusMessage: "3렇게 살자"
-  }]
+interface User {
+  comment: string;
+  name: string;
+  profile: string;
+  uid: string;
 }
 
-const FotterButton = ({onPress}) => {
+const FotterButton = ({ onPress }) => {
   return (
     <Button
       accessibilityStates
-      color={'#645464'}
+      style={
+        {
+          backgroundColor: 'black',
+          height: '10%',
+          justifyContent: 'center'
+        }}
+      labelStyle={{
+        fontSize: 19
+      }}
+      color={"#FFFFFF"}
       onPress={onPress}
       children={'친구 찾기'}
     />
   )
 }
 
+const renderSeparator = () => {
+  return (
+    <View
+      style={{
+        height: 1,
+        width: '100%',
+        backgroundColor: "#CED0CE",
+      }}
+    />
+  );
+};
+
 const FriendsScreen = () => {
 
-  const user = React.useContext(AuthContext);
+  const authContext = React.useContext(AuthContext);
   const navigation = useNavigation();
+
+  const [friends, setFriends] = React.useState<User[]>([]);
+
+  React.useEffect(() => {
+    getFriends(authContext!.user.uid, setFriends);
+  }, [])
 
   const handleOnClick = () => {
     navigation.navigate('usersTab');
   }
 
+  const onPress = (uid: string, reqUid: string) => {
+    Alert.alert(
+      "요청",
+      "행동",
+      [
+        {
+          text: "취소",
+          style: "cancel"
+        },
+        {
+          text: "친구 삭제",
+          onPress: () => {
+            Alert.alert("친구 삭제", "정말로 삭제하실건가요?",
+              [{
+                text: "취소",
+                style: "cancel"
+              },
+              {
+                text: "삭제 하기",
+                onPress: async () => { await removeFriend(uid, reqUid); }
+              }])
+          }
+        },
+        {
+          text: "채팅 하기",
+          onPress: () => {
+            navigation.navigate("chatting");
+           }
+        },
+      ])
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        contentContainerStyle={{ flex: 1 }}
-        data={exampleUserList.user}
+        style={{ marginTop: 15 }}
+        data={friends}
         keyExtractor={(item) => item.uid}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                minHeight: 90,
-              }}
-              onPress={() => { }}
-            >
-              <View style={{ flex: 2, alignItems:'center', justifyContent:'center' }}>
-                <Image
-                  source={{
-                    uri:"https://i.pinimg.com/736x/2c/2c/60/2c2c60b20cb817a80afd381ae23dab05.jpg",
-                  }}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: 35,
-                    marginLeft:15
-                  }}
-                />
-              </View>
-              <View style={{ flex: 3, alignItems:'center', justifyContent:'center' }}>
-                <Text>{item.name}</Text>
-              </View>
-              <View style={{ flex: 4, alignItems:'center', justifyContent:'center' }}>
-                <Text>{item.statusMessage}</Text>
-              </View>
-            </TouchableOpacity>
+            <UserListItem
+              item={item}
+              onPress={onPress}
+            />
           )
         }}
+        ItemSeparatorComponent={renderSeparator}
       />
       <FotterButton
         onPress={handleOnClick}

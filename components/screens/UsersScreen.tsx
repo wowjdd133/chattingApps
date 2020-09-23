@@ -37,6 +37,7 @@ const UsersScreen = () => {
   React.useEffect(() => {
     (async () => {
       let data = await getUsers();
+      data = await getUsers();
       
       setUsers(data);
     })();
@@ -67,11 +68,11 @@ const UsersScreen = () => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+      style={{ flex: 1}}
     >
       <FlatList
         keyExtractor={(item) => item.uid.toString()}
-        style={{ flex: 1, width: '100%' }}
+        style={{ flex: 1, width: '100%',marginTop:-10 }}
         data={users}
         ItemSeparatorComponent={renderSeparator}
         renderItem={({ item }) => {

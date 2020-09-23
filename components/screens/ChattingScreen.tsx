@@ -5,7 +5,7 @@ import { TextInput } from 'react-native-paper';
 const ChattingScreen = () => {
   return (
     <View>
-      <Text>chattingScreen</Text>
+      
       <TextInput
         accessibilityStates
       />
